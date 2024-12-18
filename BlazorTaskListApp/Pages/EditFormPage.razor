@@ -1,0 +1,55 @@
+﻿@page "/edit-form"
+@using System.ComponentModel.DataAnnotations
+
+<h3>EditForm</h3>
+
+<EditForm Model = "@User">
+    <DataAnnotationsValidator />
+    <div>
+        <label for="name">Namn:</label>
+        <InputText @bind-Value="User.Name" id="name"></InputText>
+    </div>
+    <div>
+        <label for="email">Epost:</label>
+        <InputText @bind-Value="User.Email" id="email"></InputText>
+        <ValidationMessage For="@(()=>User.Email)"/>
+    </div>
+    <div>
+        <label for="age">Ålder:</label>
+        <InputNumber @bind-Value="User.Age" id="age"></InputNumber>
+    </div>
+    <div>
+        <label for="password">Lösenord:</label>
+        <InputText @bind-Value="User.Password" id="password" type="password"></InputText>
+    </div>
+    <div>
+        <label for="confirmPassword">Bekräfta lösenord:</label>
+        <InputText @bind-Value="User.ConfirmPassword" id="confirmPassword" type="password"></InputText>
+    </div>
+    <button type="submit">Skicka</button>
+    <ValidationSummary/>
+
+</EditForm>
+
+@code {
+    private UserModel User = new UserModel();
+
+    public class UserModel
+    {
+        [Required(ErrorMessage ="Namn är obligatoriskt.")]
+        public string Name { get; set; }
+        [EmailAddress(ErrorMessage ="Emailadressen är obligatorisk.")]
+        public string Email { get; set; }
+        [Range(15, 99,ErrorMessage =("Åldern måste vara mellan 15 och 99."))]
+        public int Age { get; set; }
+        [Required(ErrorMessage ="Du måste ange ett lösenord")]
+        [MinLength(8, ErrorMessage ="Lösenordet får inte vara kortare än 8 tecken.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+        [Required(ErrorMessage ="Bekräfta lösenordet")]
+        [Compare("Password", ErrorMessage ="Lösenorden matchar inte.")]
+        [DataType(DataType.Password)]
+        public string ConfirmPassword { get; set; }
+
+    }
+}
