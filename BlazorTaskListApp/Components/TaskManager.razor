@@ -16,7 +16,7 @@
         <InputText @bind-Value="newAssignment.Description" id="description" />
         <ValidationMessage For="@(()=>newAssignment.Description)" />
     </div>
-    <button type="submit">Create task</button>
+    <button type="submit" @onclick="AddAssignment">Create task</button>
 
 
 </EditForm>
@@ -32,5 +32,20 @@
         [MaxLength(200, ErrorMessage="Description can not exceed 200 characters")]
         public string? Description { get; set; }
 
+    }
+
+    protected override void OnInitialized()
+    {
+        GlobalStateTasks.OnChange += StateHasChanged;
+    }
+
+    private void AddAssignment()
+    {
+        GlobalStateTasks.AddTask(newAssignment.Title, newAssignment.Description);
+    }
+
+    public void Dispose()
+    {
+        GlobalStateTasks.OnChange -= StateHasChanged;
     }
 }
