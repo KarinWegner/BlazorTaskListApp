@@ -23,6 +23,22 @@ namespace BlazorTaskListApp.Service
 
             NotifyStateChanged();
         }
+
+        public void RemoveTask(int id) 
+        {
+            if (!TaskList.Any(t => t.Id == id))
+                return;
+
+            Assignment assignmentToRemove = GetAssignment(id);
+            TaskList.Remove(assignmentToRemove);
+        }
+
+        private Assignment GetAssignment(int id)
+        {
+
+            Assignment assignment = TaskList.FirstOrDefault(t => t.Id == id);
+            return assignment;
+        }
         private void NotifyStateChanged() => OnChange?.Invoke();
         public class Assignment 
         {

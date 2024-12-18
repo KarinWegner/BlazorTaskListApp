@@ -11,20 +11,24 @@
 
         @foreach(Assignment assignment in taskList)
         {
-            <div class="row">
-                <div class="row">
-                   <div class="col-10"> 
-                       <h4>@assignment.Title</h4>
+                <div class="card m-3">
+                    <div class="card-header, d-inline-flex">
+                        <div class="flex-grow-1">
+                            <h3 class="ms-3">@assignment.Title</h3>
                    </div>
-                   <div class="col-2">
+                   <div class="pe-2">
                        Id: @assignment.Id
                    </div>
                 </div>
                 @if (assignment.Description != null)
-                    {
-                        <h5>Description:</h5>
-                        <p>@assignment.Description</p>
-                    }
+                {
+                    <div class="card-body, pt-2, ps-3">
+                        <text class="fs-5">@assignment.Description</text>
+                    </div>
+                }
+                <div class="row, text-decoration-underline, card-footer">
+                    <a @onclick="(()=>DeleteTask(assignment.Id))" class="fs-6, float-end">Delete task</a>
+                </div>
                 
             </div>
         }
@@ -34,5 +38,20 @@
 
 @code {
     private IEnumerable<Assignment> taskList => GlobalStateTasks.TaskList;
-    
+
+    protected override void OnInitialized()
+    {
+        GlobalStateTasks.OnChange += StateHasChanged;
+    }
+    private void DeleteTask(int id)
+    {
+        GlobalStateTasks.RemoveTask(id);
+    }
+
+    public void Dispose()
+    {
+
+        GlobalStateTasks.OnChange -= StateHasChanged;
+    }
+
 }
