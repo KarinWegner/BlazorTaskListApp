@@ -14,6 +14,11 @@ namespace BlazorTaskListApp.Service
             int nextId = IdTracker++;
             Assignment newAssignment = new Assignment(title, description, nextId);
 
+            if (TaskList == null)
+            {
+                TaskList = new List<Assignment>();
+            }
+
             TaskList.Add(newAssignment);
 
             NotifyStateChanged();

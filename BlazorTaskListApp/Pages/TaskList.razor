@@ -1,0 +1,38 @@
+﻿@page "/ViewTasks"
+@using BlazorTaskListApp.Service
+@using static BlazorTaskListApp.Service.GlobalStateTasks
+@inject GlobalStateTasks GlobalStateTasks
+
+
+<h3>Task overview</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-6 offset-3, taskHolder">
+
+        @foreach(Assignment assignment in taskList)
+        {
+            <div class="row">
+                <div class="row">
+                   <div class="col-10"> 
+                       <h4>@assignment.Title</h4>
+                   </div>
+                   <div class="col-2">
+                       Id: @assignment.Id
+                   </div>
+                </div>
+                @if (assignment.Description != null)
+                    {
+                        <h5>Description:</h5>
+                        <p>@assignment.Description</p>
+                    }
+                
+            </div>
+        }
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<Assignment> taskList => GlobalStateTasks.TaskList;
+    
+}

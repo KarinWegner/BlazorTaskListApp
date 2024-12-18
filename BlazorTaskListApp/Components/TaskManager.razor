@@ -3,7 +3,7 @@
 @inject GlobalStateTasks GlobalStateTasks
 <h3>TaskManager</h3>
 
-<EditForm>
+ <EditForm Model="@newAssignment">
     <DataAnnotationsValidator/>
     
     <div>
@@ -24,14 +24,32 @@
 @code {
     private AssignmentTemplate newAssignment = new();
 
-    public class AssignmentTemplate
+    public class AssignmentTemplate :IValidatableObject
     {
         [Required(ErrorMessage ="Your task needs a title")]
         [MaxLength(20, ErrorMessage ="Your title can not exceed 20 characters")]
-        public string Title { get; set; }
+        public string? Title { get; set; }
         [MaxLength(200, ErrorMessage="Description can not exceed 200 characters")]
         public string? Description { get; set; }
 
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrWhiteSpace(Title))
+            {
+                yield return new ValidationResult(
+                    "Your task needs a title.",
+                    new[] { nameof(Title) });
+            }
+            if (Description != null)
+            {                
+            if (Description.Count() > 200)
+            {
+                    yield return new ValidationResult(
+                        "Description can not exceed 200 characters",
+                        new[] { nameof(Description) });
+            }
+            }
+        }
     }
 
     protected override void OnInitialized()
