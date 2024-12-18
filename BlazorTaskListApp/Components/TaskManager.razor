@@ -1,0 +1,36 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using BlazorTaskListApp.Service
+@inject GlobalStateTasks GlobalStateTasks
+<h3>TaskManager</h3>
+
+<EditForm>
+    <DataAnnotationsValidator/>
+    
+    <div>
+        <label for="title">Title:</label>
+        <InputText @bind-Value="newAssignment.Title" id="title"/>
+        <ValidationMessage For="@(()=>newAssignment.Title)"/>
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        <InputText @bind-Value="newAssignment.Description" id="description" />
+        <ValidationMessage For="@(()=>newAssignment.Description)" />
+    </div>
+    <button type="submit">Create task</button>
+
+
+</EditForm>
+
+@code {
+    private AssignmentTemplate newAssignment = new();
+
+    public class AssignmentTemplate
+    {
+        [Required(ErrorMessage ="Your task needs a title")]
+        [MaxLength(20, ErrorMessage ="Your title can not exceed 20 characters")]
+        public string Title { get; set; }
+        [MaxLength(200, ErrorMessage="Description can not exceed 200 characters")]
+        public string? Description { get; set; }
+
+    }
+}
